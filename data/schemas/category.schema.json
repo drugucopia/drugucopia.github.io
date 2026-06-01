@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://drugucopia.github.io/schemas/category.schema.json",
+  "title": "Categories",
+  "description": "Schema for validating the category definitions array in the Drugucopia project.",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "id",
+      "name",
+      "description",
+      "icon",
+      "color"
+    ],
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "Unique category identifier — must match a SubstanceCategory enum value.",
+        "pattern": "^[a-z]+(-[a-z]+)*$",
+        "minLength": 1
+      },
+      "name": {
+        "type": "string",
+        "description": "Human-readable category name.",
+        "minLength": 1
+      },
+      "description": {
+        "type": "string",
+        "description": "Detailed description of the category.",
+        "minLength": 1
+      },
+      "icon": {
+        "type": "string",
+        "description": "Lucide icon name for the category.",
+        "minLength": 1
+      },
+      "color": {
+        "type": "string",
+        "description": "Tailwind color name for the category.",
+        "minLength": 1
+      },
+      "colorClasses": {
+        "type": "string",
+        "description": "Pre-computed Tailwind CSS classes for category badge styling.",
+        "minLength": 1
+      }
+    }
+  }
+}

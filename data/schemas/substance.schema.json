@@ -1,0 +1,404 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://drugucopia.github.io/schemas/substance.schema.json",
+  "title": "Substance",
+  "description": "Schema for validating substance definitions in the Drugucopia project. Covers all fields from the Substance TypeScript interface including dosage, effects, interactions, chemistry, and harm reduction data.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "name",
+    "commonNames",
+    "categories",
+    "class",
+    "description",
+    "effects",
+    "interactions",
+    "harmReduction",
+    "legality",
+    "chemistry",
+    "history",
+    "afterEffects",
+    "riskLevel"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the substance. Must be lowercase, may contain hyphens and numbers.",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "minLength": 1
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name of the substance.",
+      "minLength": 1
+    },
+    "commonNames": {
+      "type": "array",
+      "description": "List of common names, street names, or abbreviations for the substance.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "categories": {
+      "type": "array",
+      "description": "Pharmacological categories the substance belongs to.",
+      "items": {
+        "$ref": "#/$defs/substanceCategory"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "defaultUnit": {
+      "type": "string",
+      "description": "Default unit of measurement for dosages.",
+      "minLength": 1
+    },
+    "class": {
+      "type": "string",
+      "description": "Chemical or pharmacological class of the substance (e.g., Lysergamides, Phenethylamines).",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the substance.",
+      "minLength": 1
+    },
+    "dosage": {
+      "description": "General dosage information. Structure may vary by substance.",
+      "type": "object"
+    },
+    "effects": {
+      "$ref": "#/$defs/effects"
+    },
+    "routeData": {
+      "type": "object",
+      "description": "Dosage and duration data organized by route of administration.",
+      "additionalProperties": {
+        "$ref": "#/$defs/routeDosageDuration"
+      }
+    },
+    "interactions": {
+      "$ref": "#/$defs/interactions"
+    },
+    "harmReduction": {
+      "type": "array",
+      "description": "Harm reduction tips and safety information.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "legality": {
+      "type": "string",
+      "description": "Legal status description of the substance.",
+      "minLength": 1
+    },
+    "chemistry": {
+      "$ref": "#/$defs/chemistry"
+    },
+    "history": {
+      "type": "string",
+      "description": "Historical background of the substance. Empty string if unknown."
+    },
+    "routes": {
+      "type": "array",
+      "description": "List of routes of administration available for this substance.",
+      "items": {
+        "$ref": "#/$defs/route"
+      },
+      "uniqueItems": true
+    },
+    "afterEffects": {
+      "type": "string",
+      "description": "Description of after-effects or afterglow.",
+      "minLength": 1
+    },
+    "riskLevel": {
+      "$ref": "#/$defs/riskLevel"
+    },
+    "aliases": {
+      "type": "array",
+      "description": "Alternative identifiers or aliases for the substance.",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "default": []
+    },
+    "psychonautWikiUrl": {
+      "type": "string",
+      "description": "URL to the PsychonautWiki page for this substance.",
+      "minLength": 1
+    }
+  },
+  "$defs": {
+    "substanceCategory": {
+      "type": "string",
+      "description": "Pharmacological category of a substance.",
+      "enum": [
+        "stimulants",
+        "depressants",
+        "hallucinogens",
+        "dissociatives",
+        "empathogens",
+        "cannabinoids",
+        "opioids",
+        "deliriants",
+        "nootropics",
+        "other"
+      ]
+    },
+    "riskLevel": {
+      "type": "string",
+      "description": "Overall risk level associated with the substance.",
+      "enum": [
+        "low",
+        "moderate",
+        "high",
+        "very-high"
+      ]
+    },
+    "defaultUnit": {
+      "type": "string",
+      "description": "Allowed units of measurement for substance dosages.",
+      "enum": [
+        "µg",
+        "mg",
+        "g",
+        "ml",
+        "µl"
+      ]
+    },
+    "route": {
+      "type": "string",
+      "description": "Route of administration.",
+      "enum": [
+        "oral",
+        "sublingual",
+        "buccal",
+        "insufflated",
+        "inhaled",
+        "intravenous",
+        "intramuscular",
+        "subcutaneous",
+        "rectal",
+        "transdermal"
+      ]
+    },
+    "dosageLevels": {
+      "type": "object",
+      "description": "Dosage levels from threshold to heavy.",
+      "additionalProperties": false,
+      "required": [
+        "threshold",
+        "light",
+        "common",
+        "strong",
+        "heavy"
+      ],
+      "properties": {
+        "threshold": {
+          "type": "string",
+          "description": "Threshold dose — the minimum amount to produce noticeable effects.",
+          "minLength": 1
+        },
+        "light": {
+          "type": "string",
+          "description": "Light dose — produces mild effects.",
+          "minLength": 1
+        },
+        "common": {
+          "type": "string",
+          "description": "Common dose — produces the typical desired effects.",
+          "minLength": 1
+        },
+        "strong": {
+          "type": "string",
+          "description": "Strong dose — produces intense effects.",
+          "minLength": 1
+        },
+        "heavy": {
+          "type": "string",
+          "description": "Heavy dose — potentially overwhelming or dangerous effects.",
+          "minLength": 1
+        }
+      }
+    },
+    "durationPhases": {
+      "type": "object",
+      "description": "Duration phases of a substance experience.",
+      "additionalProperties": false,
+      "required": [
+        "onset",
+        "comeup",
+        "peak",
+        "offset",
+        "total"
+      ],
+      "properties": {
+        "onset": {
+          "type": "string",
+          "description": "Time from ingestion until first noticeable effects.",
+          "minLength": 1
+        },
+        "comeup": {
+          "type": "string",
+          "description": "Time during which effects are increasing in intensity.",
+          "minLength": 1
+        },
+        "peak": {
+          "type": "string",
+          "description": "Period of maximum effect intensity.",
+          "minLength": 1
+        },
+        "offset": {
+          "type": "string",
+          "description": "Period during which effects are decreasing in intensity.",
+          "minLength": 1
+        },
+        "total": {
+          "type": "string",
+          "description": "Total duration of the experience from onset to offset.",
+          "minLength": 1
+        },
+        "afterglow": {
+          "type": "string",
+          "description": "Lingering effects after the primary experience has ended.",
+          "minLength": 1
+        }
+      }
+    },
+    "routeDosageDuration": {
+      "type": "object",
+      "description": "Dosage and duration data for a specific route of administration.",
+      "additionalProperties": false,
+      "required": [
+        "dosage",
+        "duration"
+      ],
+      "properties": {
+        "dosage": {
+          "$ref": "#/$defs/dosageLevels"
+        },
+        "duration": {
+          "$ref": "#/$defs/durationPhases"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Additional notes specific to this route.",
+          "minLength": 1
+        }
+      }
+    },
+    "interactions": {
+      "type": "object",
+      "description": "Drug interaction classifications for the substance.",
+      "additionalProperties": false,
+      "required": [
+        "dangerous",
+        "unsafe",
+        "uncertain",
+        "crossTolerances"
+      ],
+      "properties": {
+        "dangerous": {
+          "type": "array",
+          "description": "Substances or classes that produce dangerous interactions.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "unsafe": {
+          "type": "array",
+          "description": "Substances or classes that produce unsafe interactions.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "uncertain": {
+          "type": "array",
+          "description": "Substances or classes with uncertain interaction risk.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "crossTolerances": {
+          "type": "array",
+          "description": "Substance classes that share cross-tolerance.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "effects": {
+      "type": "object",
+      "description": "Subjective effects categorized by valence.",
+      "additionalProperties": false,
+      "required": [
+        "positive",
+        "neutral",
+        "negative"
+      ],
+      "properties": {
+        "positive": {
+          "type": "array",
+          "description": "Positive or desirable effects.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "neutral": {
+          "type": "array",
+          "description": "Neutral effects that are neither clearly positive nor negative.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "negative": {
+          "type": "array",
+          "description": "Negative or undesirable effects.",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "chemistry": {
+      "type": "object",
+      "description": "Chemical information about the substance.",
+      "additionalProperties": false,
+      "required": [
+        "formula",
+        "molecularWeight",
+        "class"
+      ],
+      "properties": {
+        "formula": {
+          "type": "string",
+          "description": "Chemical formula (e.g., C20H25N3O). Use 'Unknown' if not available.",
+          "minLength": 1
+        },
+        "molecularWeight": {
+          "type": "string",
+          "description": "Molecular weight (e.g., '323.43 g/mol'). Use 'Unknown' if not available.",
+          "minLength": 1
+        },
+        "class": {
+          "type": "string",
+          "description": "Chemical class (e.g., Lysergamides, Phenethylamines).",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}
